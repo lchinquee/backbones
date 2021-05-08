@@ -1,73 +1,62 @@
-/*GIVEN I need a new, secure password
-WHEN I click the button to generate a password THEN I am presented with a series of prompts for password criteria
-WHEN prompted for password criteria THEN I select which criteria to include in the password
-WHEN prompted for the length of the password THEN I choose a length of at least 8 characters and no more than 128 characters
-WHEN prompted for character types to include in the password THEN I choose lowercase, uppercase, numeric, and/or special characters
-WHEN I answer each prompt THEN my input should be validated and at least one character type should be selected
+/*
 WHEN all prompts are answered THEN a password is generated that matches the selected criteria
-WHEN the password is generated THEN the password is either displayed in an alert or written to the page*/
+WHEN the password is generated THEN the password is either displayed in an alert or written to the page
+*/
 
 // Assignment code here
 // Character type objects
-var lowercase = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-var uppercase = lowercase.map(
-  function (upperCase) {
-    return upperCase.toUpperCase();
-  });
-var numeric = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-var special = ["\!", "\"", "\#", "\$", "\%", "\'", "\(", "\)", "\*", "\+", "\-", ".", "\/", "\:", "\;", "\<", "\=", "\>", "\?", "\@", "\[", "\]", "\^", "\_", "\`", "\{", "\|", "\}", "\~"];
+var lowercase = "abcdefghijklmnopqrstuvwxyz";
+var uppercase = lowercase.toUpperCase();
+var numeric = "0123456789";
+var special = "!\"#$%&'()*+,-./:;<=>?@[]^_`{|}~\\";
 
-console.log(lowercase);
-console.log(uppercase);
-console.log(numeric);
-console.log(special);
-
-
-
-// Criteria to generate random password
+// Function to generate random password
 var generatePassword = function () {
   // Prompt the user to select character types to be included in password generation
-  // Lowercase character inclusion
   var confirmLowercase = window.confirm("Would you like to include lowercase characters in your password?");
-  // If yes (true), save value
-  if (confirmLowercase) {
-    confirmLowercase = lowercase;
-  } else {
-    // If no (false), move to next prompt
-    confirmLowercase = false;
-
-    console.log(confirmLowercase);
-  }
-  // Uppercase character inclusion
   var confirmUppercase = window.confirm("Would you like to include uppercase characters in your password?");
-  if (confirmUppercase) {
-    confirmUppercase = uppercase;
-  } else {
-    // If no (false), move to next prompt
-    confirmUppercase = false;
-    
-    console.log(confirmUppercase);
-  }
-  // Numeric character inclusion
   var confirmNumeric = window.confirm("Would you like to include numeric characters in your password?");
-  if (confirmNumeric) {
-    confirmNumeric = numeric;
-  } else {
-    // If no (false), move to next prompt
-    confirmNumeric = false;
-    
-    console.log(confirmNumeric);
-  }
-  // Special character inclusion
   var confirmSpecial = window.confirm("Would you like to include special characters in your password?");
-  if (confirmSpecial) {
-    confirmSpecial = special;
-  } else {
-    // If no (false), move to next prompt
-    confirmSpecial = false;
-    
-    console.log(confirmSpecial);
+  
+  // Prompt user to specify number of characters
+  var characterNumber = window.prompt("How long does your password need to be? You can select values between 8 to 128.");
+  // Error if value is out of bounds (THINK ABOUT CANCEL BUTTON AND NON-INTEGER VALUES)
+  var characters = parseInt(characterNumber);
+  if (characters < 8 || characters > 128) {
+    window.alert("Invalid entry! Please enter a whole number between 8 and 128.");
   }
+
+  // Check to confirm at least one prompt has been marked true
+  if (!confirmLowercase && !confirmUppercase && !confirmNumeric && !confirmSpecial) {
+    window.alert("ERROR! At least one character type must be selected.")
+  }
+
+  // Generate random password
+  var allCharacters = "";
+  // Concat all selected characters into one location
+  if (confirmLowercase) {
+    allCharacters = allCharacters.concat(lowercase);
+  }
+  if (confirmUppercase) {
+    allCharacters = allCharacters.concat(uppercase);
+  }
+  if (confirmNumeric) {
+    allCharacters = allCharacters.concat(numeric);
+  }
+  if (confirmSpecial) {
+    allCharacters = allCharacters.concat(special);
+  }
+  console.log(allCharacters);
+
+  // Select random characters for password generation
+  password = "";
+  for (var characterCount = 0; characterCount < characters; characterCount++) {
+    var randomNumber = Math.round(Math.random() * 100);
+    var stop = randomNumber%allCharacters.length;
+    password = password.concat(allCharacters[stop]);
+    console.log(stop);   
+  }
+  return password;
 }
 
   // Get references to the #generate element
@@ -79,7 +68,6 @@ var generatePassword = function () {
     var passwordText = document.querySelector("#password");
 
     passwordText.value = password;
-
   }
 
   // Add event listener to generate button
