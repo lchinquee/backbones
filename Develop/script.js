@@ -1,9 +1,3 @@
-/*
-WHEN all prompts are answered THEN a password is generated that matches the selected criteria
-WHEN the password is generated THEN the password is either displayed in an alert or written to the page
-*/
-
-// Assignment code here
 // Character type objects
 var lowercase = "abcdefghijklmnopqrstuvwxyz";
 var uppercase = lowercase.toUpperCase();
@@ -93,11 +87,16 @@ var generatePassword = function () {
 var enterCharNum = function (confirmLowercase, confirmUppercase, confirmNumeric, confirmSpecial) {
   // Prompt user to specify number of characters
   var characterNumber = window.prompt("How long does your password need to be? You can select values between 8 to 128.");
+  
   // Error if value is out of bounds
-  if (!characterNumber) {
+  if (characterNumber === "") {
     window.alert("Invalid entry! Please enter a whole number between 8 and 128.");
     return enterCharNum(confirmLowercase, confirmUppercase, confirmNumeric, confirmSpecial);
   }
+  if (characterNumber === null) {
+    return;
+  }
+
   var characters = parseInt(characterNumber);
 
   if (characters < 8 || characters > 128 || isNaN(characters)) {
@@ -108,7 +107,7 @@ var enterCharNum = function (confirmLowercase, confirmUppercase, confirmNumeric,
   // Check to confirm at least one prompt has been marked true
   if (!confirmLowercase && !confirmUppercase && !confirmNumeric && !confirmSpecial) {
     window.alert("ERROR! At least one character type must be selected.")
-    return enterCharNum(confirmLowercase, confirmUppercase, confirmNumeric, confirmSpecial);
+    return;
   }
   // Returns character value to be used in generatePassword function
   return characters;
